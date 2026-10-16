@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <title>Ламинирование ресниц — скидка 20%</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #f5f7fa;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      min-height: 100vh;
+      margin: 0;
+      padding: 20px;
+      text-align: center;
+    }
+
+    h1 {
+      color: #2c3e50;
+      margin-bottom: 15px;
+    }
+
+    p.subtitle {
+      color: #7f8c8d;
+      margin-bottom: 40px;
+    }
+
+    /* Стили для кнопки на главной странице */
+    .promo-btn {
+      background-color: #ff6b6b;
+      color: white;
+      padding: 18px 35px;
+      font-size: 20px;
+      border: none;
+      border-radius: 50px;
+      cursor: pointer;
+      box-shadow: 0 6px 15px rgba(255, 107, 107, 0.4);
+      transition: transform 0.2s, background-color 0.3s;
+      font-weight: bold;
+    }
+    .promo-btn:hover {
+      background-color: #ee5253;
+      transform: scale(1.05);
+    }
+
+    /* Стили для модального окна */
+    .modal-overlay {
+      position: fixed;
+      top: 0; left: 0; right: 0; bottom: 0;
+      background: rgba(0, 0, 0, 0.6);
+      display: none;
+      justify-content: center;
+      align-items: center;
+      z-index: 9999;
+      opacity: 0;
+      transition: opacity 0.3s ease;
+    }
+    .modal-overlay.active {
+      display: flex;
+      opacity: 1;
+    }
+    .modal-content {
+      background: white;
+      padding: 35px;
+      border-radius: 16px;
+      max-width: 420px;
+      width: 90%;
+      text-align: center;
+      position: relative;
+      box-shadow: 0 15px 40px rgba(0,0,0,0.25);
+      animation: popIn 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    }
+    @keyframes popIn {
+      from { transform: scale(0.9); opacity: 0; }
+      to { transform: scale(1); opacity: 1; }
+    }
+    .close-modal {
+      position: absolute;
+      top: 15px;
+      right: 20px;
+      font-size: 28px;
+      cursor: pointer;
+      color: #bdc3c7;
+    }
+    .close-modal:hover { color: #95a5a6; }
+
+    .discount-text {
+      color: #34495e;
+      line-height: 1.55;
+      margin-bottom: 25px;
+      font-size: 17px;
+    }
+    .highlight-price { color: #e74c3c; font-weight: bold; }
+
+    .chat-link-btn {
+      background-color: #4CAF50;
+      color: white;
+      padding: 14px 28px;
+      text-decoration: none;
+      border-radius: 8px;
+      font-weight: bold;
+      font-size: 16px;
+      display: inline-block;
+      transition: background-color 0.3s;
+    }
+    .chat-link-btn:hover { background-color: #43a047; }
+
+    /* Стили для QR-кода */
+    #qrcode {
+      margin-top: 40px;
+      padding: 10px;
+      background: white;
+      border-radius: 12px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+    }
+    .qr-label {
+      margin-top: 10px;
+      color: #7f8c8d;
+      font-size: 14px;
+    }
+  </style>
+</head>
+<body>
+
+  <h1>Скидка 20% на ламинирование ресниц!</h1>
+  <p class="subtitle">Всего 960 ₽ до 30.10.2026. Нажмите кнопку или отсканируйте QR‑код.</p>
+
+  <!-- Кнопка на главной странице -->
+  <button class="promo-btn" id="openPromoBtn">
+    Записаться со скидкой
+  </button>
+
+  <!-- Модальное окно -->
+  <div class="modal-overlay" id="promoModal">
+    <div class="modal-content">
+      <span class="close-modal">&times;</span>
+      <div class="discount-text">
+        <strong>Добрый день! 👋</strong><br><br>
+        Только для вас — скидка 20%!<br>
+        Услуга ламинирования ресниц всего за <span class="highlight-price">960 рублей</span>.<br>
+        Акция действует до 30.10.2026.<br><br>
+        Хотите, подберём свободное окошко? 😊
+      </div>
+      
+      <!-- ССЫЛКА НА ЧАТ MAX: ВСТАВЬТЕ СВОЮ ССЫЛКУ ВНУТРЬ href -->
+      <a href="https://max.ru/u/f9LHodD0cOJe_-k64XuFcpCpmfte9d04lGP4LNuaV_1jyhu0tHkN2DuKkpM" target="_blank" class="chat-link-btn">
+        Открыть чат и записаться
+      </a>
+    </div>
+  </div>
+
+  <!-- Блок для QR-кода -->
+  <div id="qrcode"></div>
+  <p class="qr-label">Отсканируйте, чтобы перейти на страницу со скидкой</p>
+
+  <!-- Подключаем библиотеку для QR-кода -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+  
+  <script>
+    // --- Логика модального окна ---
+    const openBtn = document.getElementById('openPromoBtn');
+    const modal = document.getElementById('promoModal');
+    const closeBtn = document.querySelector('.close-modal');
+
+    openBtn.addEventListener('click', () => {
+      modal.classList.add('active');
+    });
+
+    closeBtn.addEventListener('click', () => {
+      modal.classList.remove('active');
+    });
+
+    modal.addEventListener('click', (e) => {
+      if (e.target === modal) {
+        modal.classList.remove('active');
+      }
+    });
+
+    // --- Генерация QR-кода ---
+    // QR-код будет вести на ТЕКУЩУЮ страницу (чтобы человек попал на промо-страницу)
+    const currentUrl = window.location.href;
+    
+    new QRCode(document.getElementById("qrcode"), {
+      text: currentUrl,
+      width: 180,
+      height: 180,
+      colorDark: "#000000",
+      colorLight: "#ffffff",
+      correctLevel: QRCode.CorrectLevel.H
+    });
+  </script>
+</body>
+</html>
